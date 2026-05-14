@@ -159,13 +159,25 @@ export function buildTools(spec: OASpec): ToolDef[] {
   }
 
   if (!tools.some((t) => t.name === 'gorelo_test_connection')) {
-    // Pick first GET as proxy for "ping" — Gorelo spec has no /api_info equivalent.
-    const ping = tools.find((t) => t.method === 'GET');
+    // Prefer a known-small enumeration endpoint for the ping so the response
+    // stays under MCP transport limits. Fall back to first GET with no path
+    // params, then first GET at all.
+    const SMALL_PING_PATHS = [
+      '/v1/tickets/statuses',
+      '/v1/tickets/types',
+      '/v1/organization/groups',
+      '/v1/tickets/tags',
+    ];
+    let ping = tools.find(
+      (t) => t.method === 'GET' && SMALL_PING_PATHS.includes(t.pathTemplate)
+    );
+    if (!ping) ping = tools.find((t) => t.method === 'GET' && t.pathParams.length === 0);
+    if (!ping) ping = tools.find((t) => t.method === 'GET');
     if (ping) {
       tools.push({
         name: 'gorelo_test_connection',
         description:
-          "Test connection and credentials against the configured Gorelo instance. Calls the first available GET endpoint. — GET " +
+          "Test connection and credentials against the configured Gorelo instance. — GET " +
           ping.pathTemplate,
         inputSchema: { type: 'object', properties: {}, additionalProperties: false },
         method: 'GET',

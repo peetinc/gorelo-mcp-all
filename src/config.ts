@@ -16,7 +16,7 @@ export type Config = {
   disableTags: string[];
 };
 
-const DEFAULT_MAX_RESPONSE_BYTES = 1_500_000;
+const DEFAULT_MAX_RESPONSE_BYTES = 100_000;
 const DEFAULT_MAX_RETRIES = 3;
 const DEFAULT_TIMEOUT_MS = 30_000;
 

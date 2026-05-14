@@ -54,7 +54,7 @@ Missing key → hard fail at startup.
 | `GORELO_DISABLED_OPERATIONS=delete_ticket` | Disable specific tools by name. |
 | `GORELO_TIMEOUT_MS=30000` | HTTP request timeout. |
 | `GORELO_MAX_RETRIES=3` | Retries on HTTP 429; honors `Retry-After`. |
-| `GORELO_MAX_RESPONSE_BYTES=1500000` | Response truncation guard. |
+| `GORELO_MAX_RESPONSE_BYTES=100000` | Response truncation guard (~100KB default to fit MCP transport limits). |
 | `GORELO_SWAGGER_PATH=/path/to/swagger.json` | Override bundled spec. |
 
 ### Presets
